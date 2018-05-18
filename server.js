@@ -5,6 +5,9 @@ var path = require("path");
 var app = express();
 var PORT = 3000;
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 var tables = [
 	{
 		"customerName": "Kendra",
@@ -29,10 +32,13 @@ var tables = [
 var waitlist = []
 
 app.get("/", function(req, res){
-	res.send("The main page");
+	res.sendFile(path.join(__dirname, "home.html"));
 })
 app.get("/tables", function(req, res){
 	res.sendFile(path.join(__dirname, "tables.html"));
+})
+app.get("/reservation", function(req, res){
+	res.sendFile(path.join(__dirname, "reservation.html"));
 })
 app.get("/api/tables", function(req, res){
 	return res.json(tables);
@@ -40,6 +46,19 @@ app.get("/api/tables", function(req, res){
 
 app.get("/api/waitlist", function(req, res){
 	return res.json(waitlist);
+})
+
+app.post("/api/tables", function(req, res){
+	var newtable = req.body;
+	console.log(newtable);
+	if (tables.length < 5){
+		tables.push(newtable);
+		res.json(newtable);
+	}
+	else {
+		waitlist.push(newtable);
+		res.json(false);
+	}
 })
 
 app.listen(PORT, function() {
