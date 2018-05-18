@@ -29,7 +29,7 @@ var tables = [
 var waitlist = []
 
 app.get("/", function(req, res){
-	res.send("The main page");
+	res.sendFile(path.join(__dirname, "home.html"));
 })
 app.get("/tables", function(req, res){
 	res.sendFile(path.join(__dirname, "tables.html"));
