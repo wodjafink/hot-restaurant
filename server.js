@@ -5,6 +5,9 @@ var path = require("path");
 var app = express();
 var PORT = 3000;
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 var tables = [
 	{
 		"customerName": "Kendra",
@@ -43,6 +46,19 @@ app.get("/api/tables", function(req, res){
 
 app.get("/api/waitlist", function(req, res){
 	return res.json(waitlist);
+})
+
+app.post("/api/tables", function(req, res){
+	var newtable = req.body;
+	console.log(newtable);
+	if (tables.length < 5){
+		tables.push(newtable);
+		res.json(newtable);
+	}
+	else {
+		waitlist.push(newtable);
+		res.json(false);
+	}
 })
 
 app.listen(PORT, function() {
